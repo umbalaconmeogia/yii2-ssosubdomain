@@ -13,7 +13,7 @@ use yii\base\InvalidConfigException;
  *     return [
  *         // Another definition.
  *         'logout' => [
- *             'class' => \umbalaconmeogia\ssosubdomain\actions\LogoutAction::class,
+ *             'class' => \umbalaconmeogia\ssosubdomain\actions\IdentityProviderLogoutAction::class,
  *             'ssoCookieDomain' => Yii::$app->session->cookieParams['domain'],
  *         ],
  *     ];
@@ -22,7 +22,7 @@ use yii\base\InvalidConfigException;
  * @author thanh
  *
  */
-class LogoutAction extends Action
+class IdentityProviderLogoutAction extends Action
 {
     /**
      * Name of URL parameter to hold the returnUrl.

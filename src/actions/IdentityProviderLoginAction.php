@@ -13,7 +13,7 @@ use yii\base\InvalidConfigException;
  *     return [
  *         // Another definition.
  *         'login' => [
- *             'class' => \umbalaconmeogia\ssosubdomain\actions\LoginAction::class,
+ *             'class' => \umbalaconmeogia\ssosubdomain\actions\IdentityProviderLoginAction::class,
  *             'loginFormClass' => LoginForm::class,
  *         ],
  *     ];
@@ -22,7 +22,7 @@ use yii\base\InvalidConfigException;
  * @author thanh
  *
  */
-class LoginAction extends Action
+class IdentityProviderLoginAction extends Action
 {
     /**
      * Session key to restore returnUrl.
@@ -75,7 +75,7 @@ class LoginAction extends Action
     {
         // If user accesses to site/login directly from browser.
         if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
+            return $this->controller->goHome();
         }
 
         // Process URL parameter "returnUrl"
