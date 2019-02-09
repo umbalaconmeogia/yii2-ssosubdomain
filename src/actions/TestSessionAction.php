@@ -26,7 +26,7 @@ class TestSessionAction extends Action
      * View of test session.
      * @var string
      */
-    public $view = '@vendor/umbalaconmeogia/ssosubdomain/views/testSession';
+    public $view = '@vendor/umbalaconmeogia/yii2-ssosubdomain/src/views/testSession';
 
     public function run()
     {
