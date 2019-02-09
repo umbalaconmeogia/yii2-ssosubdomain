@@ -73,20 +73,23 @@ class IdentityProviderLoginAction extends Action
 
     public function run()
     {
-        // If user accesses to site/login directly from browser.
-        if (!Yii::$app->user->isGuest) {
-            return $this->controller->goHome();
-        }
-
         // Process URL parameter "returnUrl"
         $returnUrl = isset($_REQUEST[$this->urlReturnUrlParam]) ?
             $_REQUEST[$this->urlReturnUrlParam] : null;
         if ($returnUrl) { // If login is requested from sub-system.
             // Remember returnUrl into session.
             Yii::$app->session[$this->sessionReturnUrlParam] = $returnUrl;
-        } else {
-            // Clear loginReturnUrl that saved in session if login from "login" system itself.
-            $this->popLoginReturnUrl();
+        }
+
+        // If user accesses to site/login directly from browser.
+        if (!Yii::$app->user->isGuest) {
+            // Redirect to returnUrl if is requested login from other sub-system.
+            $returnUrl = $this->popLoginReturnUrl();
+            if ($returnUrl) {
+                return $this->controller->redirect($returnUrl);
+            } else {
+                return $this->controller->goHome();
+            }
         }
 
         $model = new $this->loginFormClass;
