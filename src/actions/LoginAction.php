@@ -67,7 +67,7 @@ class LoginAction extends Action
     private function popLoginReturnUrl()
     {
         $loginUrl = Yii::$app->session[$this->sessionReturnUrlParam];
-        unset(Yii::$app->session[$this->sessionReturnUrlParam]);
+        Yii::$app->session->remove($this->sessionReturnUrlParam);
         return $loginUrl;
     }
 
@@ -100,7 +100,6 @@ class LoginAction extends Action
             }
         }
 
-//         $model->password = '';
         return $this->controller->render($this->view, [
             'model' => $model,
         ]);
