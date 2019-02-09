@@ -11,6 +11,6 @@
     "autoload": {
         "psr-4": {"umbalaconmeogia\\ssosubdomain\\": "src/"}
     },
-	"keywords": ["yii2", "sso", "subdomains],
+	"keywords": ["yii2", "sso", "subdomains"],
 	"license": "MIT"
 }
