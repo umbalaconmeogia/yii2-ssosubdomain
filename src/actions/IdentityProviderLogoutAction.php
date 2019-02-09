@@ -3,7 +3,6 @@ namespace umbalaconmeogia\ssosubdomain\actions;
 
 use Yii;
 use yii\base\Action;
-use yii\base\InvalidConfigException;
 
 /**
  * Example of usage. In SiteController class, declare the action.
@@ -14,7 +13,6 @@ use yii\base\InvalidConfigException;
  *         // Another definition.
  *         'logout' => [
  *             'class' => \umbalaconmeogia\ssosubdomain\actions\IdentityProviderLogoutAction::class,
- *             'ssoCookieDomain' => Yii::$app->session->cookieParams['domain'],
  *         ],
  *     ];
  * }
@@ -49,9 +47,7 @@ class IdentityProviderLogoutAction extends Action
     {
         parent::init();
 
-        if ($this->ssoCookieDomain === null) {
-            throw new InvalidConfigException('LogoutAction::ssoCookieDomain must be set.');
-        }
+        $this->ssoCookieDomain === Yii::$app->session->cookieParams['domain'];
     }
 
     public function run()
@@ -64,8 +60,9 @@ class IdentityProviderLogoutAction extends Action
 
         // Clear session id key of all sub-domains in cookie.
         foreach ($_COOKIE as $key => $value) {
-            if (strpos($key, $this->ssoSessionIdPrefix) !== FALSE) {
-                setcookie($key, $value, time() - 3600, null, $this->ssoCookieDomain);
+            if (strpos($key, $this->ssoSessionIdPrefix) === 0) {
+                unset($_COOKIE[$key]);
+                setcookie($key, null, time() - 60, '/', $this->ssoCookieDomain);
             }
         };
 
