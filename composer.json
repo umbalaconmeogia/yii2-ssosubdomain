@@ -1,0 +1,16 @@
+{
+    "name": "umbalaconmeogia/yii2-ssosubdomain",
+	"type": "yii2-extension",
+	"description": "Library to help implementing SSO on subdomains.",
+    "authors": [
+        {
+            "name": "Tran Trung Thanh",
+            "role": "Developer"
+        }
+    ],
+    "autoload": {
+        "psr-4": {"umbalaconmeogia\\ssosubdomain\\": "src/"}
+    },
+	"keywords": ["yii2", "sso", "subdomains],
+	"license": "MIT"
+}
