@@ -57,32 +57,31 @@ class ServiceProviderLoginAction extends Action
     {
         $loginUrl = $this->loginUrl();
         if (!Yii::$app->user->isGuest) {
-            $this->setCountSession($loginUrl, true); // Clear count in session.
+            $this->setCountSession(true); // Clear count in session.
             return $this->controller->goBack();
         }
 
-        $this->setCountSession($loginUrl, false); // Prevent loop of redirecting.
+        $this->setCountSession(false); // Prevent loop of redirecting.
         return $this->controller->redirect($loginUrl);
     }
 
     /**
      * Set counter in session to prevent looping of redirection from login Url.
-     * @param string $loginUrl
      * @param boolean $clear
      * @throws HttpException
      */
-    private function setCountSession($loginUrl, $clear)
+    private function setCountSession($clear)
     {
-//         \Yii::trace(__METHOD__ . "($loginUrl, $clear)");
-        $sessionKey = "COUNT_" . base64_encode($loginUrl);
+        \Yii::trace(__METHOD__ . "($clear)");
+        $sessionKey = "COUNT_" . base64_encode($this->idProviderLoginUrl);
         if ($clear) {
             Yii::$app->session->remove($sessionKey);
         } else {
-            if (Yii::$app->session[$sessionKey]) {
+            $count = Yii::$app->session[$sessionKey];
+            Yii::trace("Count $sessionKey = $count");
+            if (Yii::$app->session[$sessionKey] >= 2) {
                 throw new HttpException('You do not have permission to access this page');
             }
-            $count = Yii::$app->session[$sessionKey];
-//             Yii::trace("Count $sessionKey = $count");
             Yii::$app->session[$sessionKey] = $count + 1;
         }
     }
