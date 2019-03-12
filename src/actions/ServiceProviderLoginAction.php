@@ -4,6 +4,7 @@ namespace umbalaconmeogia\ssosubdomain\actions;
 use Yii;
 use yii\base\Action;
 use yii\base\InvalidConfigException;
+use yii\web\HttpException;
 
 /**
  * Example of usage. In SiteController class, declare the action.
@@ -54,11 +55,36 @@ class ServiceProviderLoginAction extends Action
      */
     public function run()
     {
+        $loginUrl = $this->loginUrl();
         if (!Yii::$app->user->isGuest) {
+            $this->setCountSession($loginUrl, true); // Clear count in session.
             return $this->controller->goBack();
         }
 
-        return $this->controller->redirect($this->loginUrl());
+        $this->setCountSession($loginUrl, false); // Prevent loop of redirecting.
+        return $this->controller->redirect($loginUrl);
+    }
+
+    /**
+     * Set counter in session to prevent looping of redirection from login Url.
+     * @param string $loginUrl
+     * @param boolean $clear
+     * @throws HttpException
+     */
+    private function setCountSession($loginUrl, $clear)
+    {
+//         \Yii::trace(__METHOD__ . "($loginUrl, $clear)");
+        $sessionKey = "COUNT_" . base64_encode($loginUrl);
+        if ($clear) {
+            Yii::$app->session->remove($sessionKey);
+        } else {
+            if (Yii::$app->session[$sessionKey]) {
+                throw new HttpException('You do not have permission to access this page');
+            }
+            $count = Yii::$app->session[$sessionKey];
+//             Yii::trace("Count $sessionKey = $count");
+            Yii::$app->session[$sessionKey] = $count + 1;
+        }
     }
 
     /**
