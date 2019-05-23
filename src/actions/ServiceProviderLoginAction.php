@@ -89,7 +89,7 @@ class ServiceProviderLoginAction extends Action
             Yii::trace("Current $sessionKey = $count");
             if (Yii::$app->session[$sessionKey] >= 2) {
                 $this->clearCountAccess();
-                throw new HttpException('You do not have permission to access this page');
+                throw new HttpException(403, 'You do not have permission to access this page');
             }
             Yii::$app->session[$sessionKey] = $count + 1;
         }
